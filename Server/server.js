@@ -3,6 +3,7 @@ const dotenv = require('dotenv');
 const Connection = require("./Models/mongoConnects");
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
+const authRouters = require("./Routers/auth/auth-routers")
 const app = express();
 dotenv.config({path:"./Config/config.env"});
  
@@ -21,9 +22,9 @@ app.use(cors({
         credentials: true
     }));
 
-    app.use(cookieParser());
-    app.use(express.json());
-
+app.use(cookieParser());
+app.use(express.json());
+app.use("/api/auth",authRouters);
 
 Connection();
 app.listen(PORT,(req,res)=>{

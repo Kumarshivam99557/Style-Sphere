@@ -10,6 +10,7 @@ const intialState = {
 };
 const AuthRegistration = () => {
   const [formData, setFormData] = useState(intialState);
+  console.log(formData)
   function onSubmit() {}
   return (
     <div className="max-auto w-full max-w-md space-y-6">
