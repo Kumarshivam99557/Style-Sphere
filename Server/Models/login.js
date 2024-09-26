@@ -10,3 +10,6 @@ const loginSchema = mongoose.Schema({
         required:true
     },
 });
+
+const Collection = mongoose.model("login",loginSchema);
+
