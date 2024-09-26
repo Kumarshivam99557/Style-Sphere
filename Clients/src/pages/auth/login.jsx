@@ -14,7 +14,7 @@ const AuthLogin = () => {
     <div className="max-auto w-full max-w-md space-y-6">
       <div className="text-center">
         <h1 className="text-3xl font-bold tracking-tight text-foreground">
-          Sign in your account
+          Sign in your account make it
         </h1>
         <p className="mt-2">
           Don't have an account
@@ -38,3 +38,6 @@ const AuthLogin = () => {
 };
 
 export default AuthLogin;
+
+
+// github checking purpouse
