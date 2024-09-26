@@ -9,6 +9,10 @@ const loginSchema = mongoose.Schema({
         type:String,
         required:true
     },
+    username:{
+        type:String,
+        required:true
+    }
 });
 
 const Collection = mongoose.model("login",loginSchema);
