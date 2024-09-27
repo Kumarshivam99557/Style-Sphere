@@ -16,7 +16,7 @@ const AuthRegistration = () => {
      const dispatch=useDispatch();
      const nevigate = useNavigate();
   function onSubmit(event) {
-      event.preventdefault();
+      event.preventDefault();
       dispatch(registerUser(formData)).then((data)=>{
         console.log(data)
       })

@@ -16,10 +16,8 @@ export const registerUser = createAsyncThunk(
       formData,
       { withCredentials: true }
     );
-
-    console.log("response data",respons.data)
     return respons.data;
-  }catch(err){
+  }catch(error){
     console.error("Error during registration:", error);
     return rejectWithValue(error.response.data);
   }
@@ -38,15 +36,14 @@ const authSlice = createSlice({
       })
       .addCase(registerUser.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.user = action.payload;
+        state.user = null;
         state.isAuthenticated = false;
-        console.log(action.payload)
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.isLoading = false;
         state.user = null;
         state.isAuthenticated = false;
-        console.error("Registration failed:", action.error.message);
+        console.error("Registration  failed:", action.error.message);
       });
   },
 });
