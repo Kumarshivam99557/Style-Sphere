@@ -18,7 +18,7 @@ export const registerFormControls = [
         label: " Password",
         placeholder: " enter your password",
         componentType: "input",
-        type: "Password",
+        type: "password",
     }
 ]
 

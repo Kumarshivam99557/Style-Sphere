@@ -28,7 +28,7 @@ const AuthLogin = () => {
       </div>
       <CommonForm
         formsControls={loginFormControls}
-        buttomText={"Sign in"}
+        buttonText={"Sign in"}
         formData={formData}
         setFormData={setFormData}
         onSubmit={onSubmit}

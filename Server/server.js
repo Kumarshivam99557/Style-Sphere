@@ -3,14 +3,15 @@ const dotenv = require('dotenv');
 const Connection = require("./Models/mongoConnects");
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
-const authRouters = require("./Routers/auth/auth-routers")
+const authRouters = require("./Routers/auth/auth-routers");
+const e = require('cors');
 const app = express();
 dotenv.config({path:"./Config/config.env"});
  
 const PORT = process.env.PORT || 5000
 
 app.use(cors({
-        origin: "http://localhost:5173/",
+        origin: "http://localhost:5173",
         method: ["GET","POST","DELETE","PUT"],
         allowedHeaders: [
             "Content-Type",
@@ -24,6 +25,7 @@ app.use(cors({
 
 app.use(cookieParser());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use("/api/auth",authRouters);
 
 Connection();

@@ -12,14 +12,14 @@ import { Button } from "../ui/button";
 
 function CommonForm({
   formsControls,
+  buttonText,
   formData,
   setFormData,
   onSubmit,
-  buttonText,
 }) {
   function renderInputsByComponentType(getControlItem) {
     let element = null;
-  const  value=formData[getControlItem.name] || ''
+  const  value = formData[getControlItem.name] || ''
     switch (getControlItem.componentType) {
       case "input":
         element = (
