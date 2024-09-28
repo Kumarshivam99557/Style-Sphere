@@ -11,18 +11,30 @@ export const registerUser = createAsyncThunk(
   "/auth/registration",
   async (formData,{ rejectWithValue }) => {
     try{
-    const respons = await axios.post(
+    const response = await axios.post(
       "http://localhost:3000/api/auth/register",
       formData,
       { withCredentials: true }
     );
-    return respons.data;
+    return response.data;
   }catch(error){
     console.error("Error during registration:", error);
     return rejectWithValue(error.response.data);
   }
 }
 );
+
+export const loginUser = createAsyncThunk(
+  "/auth/login", async(formData)=>{
+    try{
+      const response = await axios.post("http://localhost:3000/api/auth/login",formData,{withCredentials : true});
+      return response.data;
+    }catch(error){
+      // console.error("error during login",error);
+    }
+  }
+)
+
 const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -43,7 +55,19 @@ const authSlice = createSlice({
         state.isLoading = false;
         state.user = null;
         state.isAuthenticated = false;
-      });
+      }).addCase(loginUser.pending, (state, action) => {
+        state.isLoading = true;
+      })
+      .addCase(loginUser.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.user = action.payload.success ? action.payload.user : null;
+        state.isAuthenticated = action.payload.success ;
+      })
+      .addCase(loginUser.rejected, (state, action) => {
+        state.isLoading = false;
+        state.user = null;
+        state.isAuthenticated = false;
+      })
   },
 });
 
