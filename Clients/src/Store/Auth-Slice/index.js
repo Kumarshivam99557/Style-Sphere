@@ -43,7 +43,6 @@ const authSlice = createSlice({
         state.isLoading = false;
         state.user = null;
         state.isAuthenticated = false;
-        console.error("Registration  failed:", action.error.message);
       });
   },
 });
