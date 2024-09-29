@@ -6,9 +6,9 @@ const router = express.Router();
 router.post("/register",registerUser);
 router.post("/login",loginUser);
 router.post("/logout",logoutUser);
-router.get("/check-auth",authMiddleware, ()=>{
+router.get("/check-auth",authMiddleware, (req,res)=>{
       const user = req.user;
-      resizeBy.status(200).json({
+      res.status(200).json({
         success:true,
         message:" Authenticated User!",
         user
