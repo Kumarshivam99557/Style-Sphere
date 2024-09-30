@@ -10,9 +10,9 @@ const CheckAuth = ({ isAuthenticated, user, isLoading, children }) => {
 
   // While loading, don't redirect anywhere
 
-  // if (isLoading) {
-  //   return <div>Loading...</div>;
-  // }
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   // If the user is not authenticated and trying to access a protected page
   if (
