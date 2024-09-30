@@ -2,20 +2,35 @@ import React from "react";
 import { Navigate, useLocation } from "react-router-dom";
 
 const CheckAuth = ({ isAuthenticated, user, isLoading, children }) => {
+
+  console.log("authexxxx",isAuthenticated)
   const location = useLocation();
 
-  // Loading state - do not redirect until authentication is confirmed
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+  console.log("checkauthpage", location.pathname, "authentication", isAuthenticated, "loading", isLoading);
 
-  // If the user is not authenticated, redirect to login
-  if (!isAuthenticated && !location.pathname.includes("/auth")) {
+  // While loading, don't redirect anywhere
+
+  // if (isLoading) {
+  //   return <div>Loading...</div>;
+  // }
+
+  // If the user is not authenticated and trying to access a protected page
+  if (
+    !isAuthenticated &&
+    !(
+      location.pathname.includes("/login") ||
+      location.pathname.includes("/registration")
+    )
+  ) {
     return <Navigate to="/auth/login" />;
   }
 
-  // If the user is authenticated and tries to access login/registration, redirect them based on role
-  if (isAuthenticated && (location.pathname.includes("/login") || location.pathname.includes("/registration"))) {
+  // If the user is authenticated and trying to access login or registration
+  if (
+    isAuthenticated &&
+    (location.pathname.includes("/login") ||
+      location.pathname.includes("/registration"))
+  ) {
     if (user?.role === "admin") {
       return <Navigate to="/admin/dashboard" />;
     } else {
@@ -23,17 +38,25 @@ const CheckAuth = ({ isAuthenticated, user, isLoading, children }) => {
     }
   }
 
-  // If a non-admin user tries to access admin pages, redirect to unauthorized page
-  if (isAuthenticated && user?.role !== "admin" && location.pathname.includes("/admin")) {
+  // If an authenticated non-admin user tries to access an admin page
+  if (
+    isAuthenticated &&
+    user?.role !== "admin" &&
+    location.pathname.includes("admin")
+  ) {
     return <Navigate to="/unauth-page" />;
   }
 
-  // If an admin tries to access shopping pages, redirect to admin dashboard
-  if (isAuthenticated && user?.role === "admin" && location.pathname.includes("/shop")) {
+  // If an authenticated admin tries to access a non-admin (shop) page
+  if (
+    isAuthenticated &&
+    user?.role === "admin" &&
+    location.pathname.includes("shop")
+  ) {
     return <Navigate to="/admin/dashboard" />;
   }
 
-  // If everything is valid, render the children (requested page)
+  // If authenticated and everything is valid, render the requested component
   return <div>{children}</div>;
 };
 
