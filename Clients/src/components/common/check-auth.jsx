@@ -1,8 +1,12 @@
 import React from "react";
+// import { useSelector } from "react-redux";
 import { Navigate, useLocation } from "react-router-dom";
 
-const CheckAuth = ({ isAuthenticated, user, isLoading, children }) => {
+const CheckAuth = ({ isAuthenticated, user, children,isLoading }) => {
 
+
+  // const {isLoading}=useSelector((state)=>state.auth);
+  // console.log("toolkit",isLoading);
   console.log("authexxxx",isAuthenticated)
   const location = useLocation();
 

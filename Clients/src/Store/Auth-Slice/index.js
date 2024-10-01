@@ -3,10 +3,12 @@ import axios from "axios";
 
 const initialState = {
   isAuthenticated: false,
-  isLoading: true,
+  isLoading: true, // Initially true to show loading until authentication check completes
   user: null,
+  error: null, // Capture error state
 };
 
+// Register User
 export const registerUser = createAsyncThunk(
   "/auth/registration",
   async (formData, { rejectWithValue }) => {
@@ -18,90 +20,106 @@ export const registerUser = createAsyncThunk(
       );
       return response.data;
     } catch (error) {
-      console.error("Error during registration:", error);
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(error.response?.data || "Registration failed");
     }
   }
 );
 
-export const loginUser = createAsyncThunk("/auth/login", async (formData) => {
-  try {
-    const response = await axios.post(
-      "http://localhost:3000/api/auth/login",
-      formData,
-      { withCredentials: true }
-    );
-    return response.data;
-  } catch (error) {
-    // console.error("error during login",error);
+// Login User
+export const loginUser = createAsyncThunk(
+  "/auth/login",
+  async (formData, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/api/auth/login",
+        formData,
+        { withCredentials: true }
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || "Login failed");
+    }
   }
-});
+);
 
-export const checkAuth = createAsyncThunk("auth/checkauth", async () => {
-  try {
-    const response = await axios.get(
-      "http://localhost:3000/api/auth/check-auth",
-      {
+// Check Authentication Status
+export const checkAuth = createAsyncThunk(
+  "auth/checkauth",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios.get("http://localhost:3000/api/auth/check-auth", {
         withCredentials: true,
         headers: {
-          "Cache-Control":
-            "no-store, no-cache, must-revalidate, proxy-revalidate,",
+          "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
           Expires: "0",
         },
-      }
-    );
-    console.log("auth login",response.data);
-    return response.data;
-  } catch (error) {
-    console.log(error);
+      });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || "Authentication check failed");
+    }
   }
-});
+);
 
 const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    setUser: (state, action) => {},
+    setUser: (state, action) => {
+      state.user = action.payload;
+      state.isAuthenticated = !!action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(registerUser.pending, (state, action) => {
+      // Register User
+      .addCase(registerUser.pending, (state) => {
         state.isLoading = true;
+        state.error = null;
       })
-      .addCase(registerUser.fulfilled, (state, action) => {
+      .addCase(registerUser.fulfilled, (state) => {
         state.isLoading = false;
-        state.user = null;
         state.isAuthenticated = false;
+        state.user = null;
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.isLoading = false;
-        state.user = null;
-        state.isAuthenticated = false;
+        state.error = action.payload;
       })
-      .addCase(loginUser.pending, (state, action) => {
+
+      // Login User
+      .addCase(loginUser.pending, (state) => {
         state.isLoading = true;
+        state.error = null;
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.user = action.payload.success ? action.payload.user : null;
         state.isAuthenticated = action.payload.success;
+        state.user = action.payload.success ? action.payload.user : null;
+        state.error = action.payload.success ? null : "Login failed";
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.isLoading = false;
-        state.user = null;
         state.isAuthenticated = false;
-      }).addCase(checkAuth.pending, (state, action) => {
+        state.user = null;
+        state.error = action.payload || "Login failed";
+      })
+
+      // Check Authentication
+      .addCase(checkAuth.pending, (state) => {
         state.isLoading = true;
+        state.error = null;
       })
       .addCase(checkAuth.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.user = action.payload.success ? action.payload.user : null;
         state.isAuthenticated = action.payload.success;
+        state.user = action.payload.success ? action.payload.user : null;
       })
       .addCase(checkAuth.rejected, (state, action) => {
         state.isLoading = false;
-        state.user = null;
         state.isAuthenticated = false;
+        state.user = null;
+        state.error = action.payload || "Authentication failed";
       });
   },
 });
