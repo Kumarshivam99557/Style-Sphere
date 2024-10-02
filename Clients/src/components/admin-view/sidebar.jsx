@@ -29,13 +29,16 @@ const adminSidebarMenuItems = [
   },
 ];
 
-function MenuItems() {
+function MenuItems({setOpen}) {
   const navigate = useNavigate();
   return (
     <nav className="mt-8 flex-col flex gap-2">
       {adminSidebarMenuItems.map((menuItem) => (
         <div
-          onClick={() => navigate(menuItem.path)}
+          onClick={() => {
+            navigate(menuItem.path)
+            setOpen ? setOpen(false) : null
+          }}
           key={menuItem.id}
           className=" flex cursor-pointer text-xl items-center gap-2 rounded-md px-3 py-2 text-muted-foreground  hover:bg-muted hover:text-foreground  "
         >
@@ -61,7 +64,7 @@ const AdminSidebar = ({ open, setOpen }) => {
                   <h1 className="text-2xl font-extrabold">Admin Panel </h1>
                 </SheetTitle>
               </SheetHeader>
-              <MenuItems />
+              <MenuItems setOpen={setOpen} />
             </div>
           </SheetContent>
         </Sheet>
