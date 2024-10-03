@@ -4,6 +4,7 @@ const Connection = require("./Models/mongoConnects");
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const authRouters = require("./Routers/auth/auth-routers");
+const adminProductsRouter = require("./Routers/admin/products-routers");
 const e = require('cors');
 const app = express();
 dotenv.config({path:"./Config/config.env"});
@@ -27,6 +28,7 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/api/auth",authRouters);
+app.use("/api/admin/product",adminProductsRouter);
 
 Connection();
 app.listen(PORT,(req,res)=>{

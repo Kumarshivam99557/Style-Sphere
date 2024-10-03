@@ -2,6 +2,7 @@ import React, { useRef } from "react";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { FileIcon, UploadCloudIcon, XIcon } from "lucide-react";
+import { Button } from "../ui/button";
 
 const ProductImageUpload = ({
   imageFile,
