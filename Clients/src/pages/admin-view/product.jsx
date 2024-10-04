@@ -61,6 +61,7 @@ const AdminProduct = () => {
               uploadedImageUrl={uploadedImageUrl}
               setUploadedImageUrl={setUploadedImageUrl}
               setImageloadingState={setImageloadingState}
+              imageLoadingState={imageLoadingState}
             />
             <div className="py-6">
               <CommonForm
