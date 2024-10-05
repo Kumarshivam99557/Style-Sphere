@@ -1,6 +1,8 @@
 import ProductImageUpload from "@/components/admin-view/image-upload";
 import CommonForm from "@/components/common/form";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast";
+
 import {
   Sheet,
   SheetContent,
@@ -31,21 +33,35 @@ const AdminProduct = () => {
   const [uploadedImageUrl, setUploadedImageUrl] = useState("");
   const [imageLoadingState, setImageloadingState] = useState(false);
   const dispatch = useDispatch();
-  const {products} = useSelector(state=>state.adminProducts);
+  const { products } = useSelector((state) => state.adminProducts);
+  const { toast } = useToast();
   function onSubmit(event) {
     event.preventDefault();
-    dispatch(addNewProducts({
-      ...formData,
-      image : uploadedImageUrl
-    }))
+    dispatch(
+      addNewProducts({
+        ...formData,
+        image: uploadedImageUrl,
+      })
+    ).then((data) => {
+      console.log(data);
+      if (data?.payload?.success) {
+        dispatch(fetchAllProducts());
+        setImageFile(null);
+        setFormData(initialFormData);
+        setOpenCreateProductsDialog(false);
+        toast({
+          title: "Product add Successfully",
+        });
+      }
+    });
   }
 
   useEffect(() => {
-       dispatch(fetchAllProducts())
+    dispatch(fetchAllProducts());
   }, [dispatch]);
-  console.log("productslist",products)
+  console.log("productslist", products);
   console.log(formData);
-  console.log("image url",uploadedImageUrl)
+  console.log("image url", uploadedImageUrl);
   return (
     <Fragment>
       <div className="mb-5 w-full flex justify-end">
@@ -96,3 +112,5 @@ const AdminProduct = () => {
 };
 
 export default AdminProduct;
+
+
