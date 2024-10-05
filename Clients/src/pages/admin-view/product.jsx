@@ -13,6 +13,7 @@ import { addProductFormElements } from "@/config";
 import { addNewProducts, fetchAllProducts } from "@/Store/admin/product-slice";
 import React, { Fragment, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import AdminProductTile from "@/components/admin-view/products-tile";
 
 const initialFormData = {
   image: null,
@@ -73,6 +74,11 @@ const AdminProduct = () => {
         </Button>
       </div>
       <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-4">
+        {
+          products && products.length > 0 ?
+          products.map(productItems=> <AdminProductTile product={productItems}/>) : null
+        }
+      </div>
         <Sheet
           className="bg-white text-black"
           open={openCreateProductsDialog}
@@ -106,7 +112,7 @@ const AdminProduct = () => {
             </div>
           </SheetContent>
         </Sheet>
-      </div>
+      
     </Fragment>
   );
 };
