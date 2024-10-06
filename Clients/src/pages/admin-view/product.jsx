@@ -12,6 +12,7 @@ import {
 import { addProductFormElements } from "@/config";
 import {
   addNewProducts,
+  deleteProducts,
   editProducts,
   fetchAllProducts,
 } from "@/Store/admin/product-slice";
@@ -85,6 +86,16 @@ const AdminProduct = () => {
   useEffect(() => {
     dispatch(fetchAllProducts());
   }, [dispatch]);
+
+  function handleDelete(getCurrentProductId) {
+    console.log(getCurrentProductId, "idddxx");
+    dispatch(deleteProducts(getCurrentProductId )).then((data) => {
+      console.log(data);
+      if(data?.payload?.success){
+        dispatch(fetchAllProducts());
+      }
+    });
+  }
   function isFormValid() {
     return Object.keys(formData)
       .map((keys) => formData[keys] !== "")
@@ -107,10 +118,12 @@ const AdminProduct = () => {
         {products && products.length > 0
           ? products.map((productItems) => (
               <AdminProductTile
+                key={productItems.id}
                 setFormData={setFormData}
                 setOpenCreateProductsDialog={setOpenCreateProductsDialog}
                 setCurrentEditedId={setCurrentEditedId}
                 product={productItems}
+                handleDelete={handleDelete}
               />
             ))
           : null}

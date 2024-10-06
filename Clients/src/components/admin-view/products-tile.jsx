@@ -2,7 +2,7 @@ import React from "react";
 import { Card, CardContent, CardFooter } from "../ui/card";
 import { Button } from "../ui/button";
 
-const AdminProductTile = ({ product,setCurrentEditedId,setOpenCreateProductsDialog,setFormData }) => {
+const AdminProductTile = ({ product, setCurrentEditedId, setOpenCreateProductsDialog, setFormData, handleDelete }) => {
   return (
     <Card className="w-full max-w-sm mx-auto">
       <div>
@@ -28,12 +28,23 @@ const AdminProductTile = ({ product,setCurrentEditedId,setOpenCreateProductsDial
           </div>
         </CardContent>
         <CardFooter className="flex justify-between items-center ">
-          <Button className="bg-black text-white" onClick={()=>{
-            setOpenCreateProductsDialog(true);
-            setCurrentEditedId(product?._id);
-            setFormData(product)
-            }}>edit</Button>
-          <Button className="bg-black text-white"> delete</Button>
+          <Button
+            className="bg-black text-white"
+            onClick={() => {
+              setOpenCreateProductsDialog(true);
+              setCurrentEditedId(product?._id);
+              setFormData(product);
+            }}
+          >
+            Edit
+          </Button>
+          {/* Fix the handleDelete to be invoked on button click */}
+          <Button
+            onClick={() => handleDelete(product?._id)}
+            className="bg-black text-white"
+          >
+            Delete
+          </Button>
         </CardFooter>
       </div>
     </Card>
