@@ -33,11 +33,13 @@ const AdminProduct = () => {
   const [imageFile, setImageFile] = useState(null);
   const [uploadedImageUrl, setUploadedImageUrl] = useState("");
   const [imageLoadingState, setImageloadingState] = useState(false);
+  const [currentEditedId, setCurrentEditedId] = useState(null);
   const dispatch = useDispatch();
   const { products } = useSelector((state) => state.adminProducts);
   const { toast } = useToast();
   function onSubmit(event) {
     event.preventDefault();
+    
     dispatch(
       addNewProducts({
         ...formData,
@@ -61,7 +63,7 @@ const AdminProduct = () => {
     dispatch(fetchAllProducts());
   }, [dispatch]);
   console.log("productslist", products);
-  console.log(formData);
+  console.log(formData ,"xxxxxxxxxxxxxxxxxxxx");
   console.log("image url", uploadedImageUrl);
   return (
     <Fragment>
@@ -74,49 +76,57 @@ const AdminProduct = () => {
         </Button>
       </div>
       <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-4">
-        {
-          products && products.length > 0 ?
-          products.map(productItems=> <AdminProductTile product={productItems}/>) : null
-        }
-      </div>
-        <Sheet
-          className="bg-white text-black"
-          open={openCreateProductsDialog}
-          onOpenChange={() => {
-            setOpenCreateProductsDialog(false);
-          }}
-        >
-          <SheetContent
-            side="right"
-            className="bg-white text-black z-50 overflow-auto"
-          >
-            <SheetHeader>
-              <SheetTitle>Add New Products</SheetTitle>
-            </SheetHeader>
-            <ProductImageUpload
-              imageFile={imageFile}
-              setImageFile={setImageFile}
-              uploadedImageUrl={uploadedImageUrl}
-              setUploadedImageUrl={setUploadedImageUrl}
-              setImageloadingState={setImageloadingState}
-              imageLoadingState={imageLoadingState}
-            />
-            <div className="py-6">
-              <CommonForm
-                formsControls={addProductFormElements}
-                buttonText="add"
-                formData={formData}
+        {products && products.length > 0
+          ? products.map((productItems) => (
+              <AdminProductTile
                 setFormData={setFormData}
-                onSubmit={onSubmit}
+                setOpenCreateProductsDialog={setOpenCreateProductsDialog}
+                setCurrentEditedId={setCurrentEditedId}
+                product={productItems}
               />
-            </div>
-          </SheetContent>
-        </Sheet>
-      
+            ))
+          : null}
+      </div>
+      <Sheet
+        className="bg-white text-black"
+        open={openCreateProductsDialog}
+        onOpenChange={() => {
+          setOpenCreateProductsDialog(false);
+          setCurrentEditedId(null)
+          setFormData(initialFormData)
+        }}
+      >
+        <SheetContent
+          side="right"
+          className="bg-white text-black z-50 overflow-auto"
+        >
+          <SheetHeader>
+            <SheetTitle>{
+              currentEditedId !== null ? "Edit product " : "Add Product"
+            }</SheetTitle>
+          </SheetHeader>
+          <ProductImageUpload
+            imageFile={imageFile}
+            setImageFile={setImageFile}
+            uploadedImageUrl={uploadedImageUrl}
+            setUploadedImageUrl={setUploadedImageUrl}
+            setImageloadingState={setImageloadingState}
+            imageLoadingState={imageLoadingState}
+            isEditedMode={currentEditedId !== null}
+          />
+          <div className="py-6">
+            <CommonForm
+              formsControls={addProductFormElements}
+              buttonText={currentEditedId !== null ? "Edit product " : "Add Product"}
+              formData={formData}
+              setFormData={setFormData}
+              onSubmit={onSubmit}
+            />
+          </div>
+        </SheetContent>
+      </Sheet>
     </Fragment>
   );
 };
 
 export default AdminProduct;
-
-
